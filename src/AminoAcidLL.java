@@ -1,10 +1,11 @@
 class AminoAcidLL{
   char aminoAcid;
-  String[] codons;
+  private String[] codons;
   int[] counts;
-  AminoAcidLL next;
+  private AminoAcidLL next;
 
   AminoAcidLL(){
+    aminoAcid = 0;
 
   }
 
