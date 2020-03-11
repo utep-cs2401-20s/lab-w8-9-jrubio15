@@ -1,8 +1,8 @@
 class AminoAcidLL{
   char aminoAcid;
-  private String[] codons;
+  String[] codons;
   int[] counts;
-  private AminoAcidLL next;
+  AminoAcidLL next;
 
   AminoAcidLL(){
     aminoAcid = 0;
@@ -15,7 +15,10 @@ class AminoAcidLL{
    * pair and increments the codon counter for that codon.
    * NOTE: Does not check for repeats!! */
   AminoAcidLL(String inCodon){
-  
+    AminoAcidResources.getAminoAcidFromCodon(inCodon);
+    AminoAcidResources.getCodonListForAminoAcid(aminoAcid);
+    incrCodon(inCodon);
+    next = null;
   }
 
   /********************************************************************************************/
@@ -24,10 +27,16 @@ class AminoAcidLL{
    * if not passes the task to the next node. 
    * If there is no next node, add a new node to the list that would contain the codon. 
    */
-  private void addCodon(String inCodon){
-  
-  }
-
+  private void incrCodon(String c) {}
+    private void addCodon (String inCodon) {
+      if (next == null) {
+        if (aminoAcid == AminoAcidResources.getAminoAcidFromCodon(inCodon)) {
+          incrCodon(inCodon);
+        } else if (next != null) {
+          next.addCodon(inCodon);
+        }
+      }
+    }
 
   /********************************************************************************************/
   /* Shortcut to find the total number of instances of this amino acid */
