@@ -115,15 +115,56 @@ class AminoAcidLL {
   /********************************************************************************************/
   /* Same ad above, but counts the codon usage differences
    * Must be sorted. */
-  public int codonCompare(AminoAcidLL inList){
-    return 0;
-  }
+  public int codonCompare(AminoAcidLL inList) {
+    if (inList.isSorted()) {
+      return 0;
+    }
+    int diff = 0;
+    if (inList == null) {
+      diff += totalCount();
+      next.codonCompare(inList);
+    }
+    if (next != null) {
+      diff += next.codonCompare(inList.next);
+    } else if (aminoAcid == inList.aminoAcid) {
+        diff += codonDiff(inList);
 
+      if (next != null) {
+        diff += next.codonCompare(inList.next);
+      }
+      if(next == null && inList.next != null){
+        diff += codonCompare(inList.next);
+      }
+      else if(next != null && aminoAcid < inList.aminoAcid){
+        diff += totalCount();
+        if(next != null){
+          diff += next.codonCompare(inList);
+        }
+        else if(next == null || aminoAcid > inList.aminoAcid){
+          diff += inList.totalCount();
+          if(inList.next != null){
+            diff += codonCompare(inList.next);
+          }
+        }
+      }
+    }
+    return diff;
+  }
 
   /********************************************************************************************/
   /* Recursively returns the total list of amino acids in the order that they are in in the linked list. */
-  public char[] aminoAcidList(){
-    return new char[]{};
+  public char[] aminoAcidList() {
+    if (next == null) {
+      return new char[]{aminoAcid};
+    }
+    char[] a = next.aminoAcidList();
+    char[] finalA = new char[a.length + 1];
+    finalA[0] = aminoAcid;
+
+    for (int i = 1; i < finalA.length; i++) {
+      finalA[i] = a[i - 1];
+    }
+    return finalA;
   }
 
   /********************************************************************************************/
