@@ -170,21 +170,60 @@ class AminoAcidLL {
   /********************************************************************************************/
   /* Recursively returns the total counts of amino acids in the order that they are in in the linked list. */
   public int[] aminoAcidCounts(){
-    return new int[]{};
+    if(next == null){
+      return new int[]{};
+    }
+    else{
+      int[] node = next.aminoAcidCounts();
+      int[] counts = new int[node.length + 1];
+
+      for(int i = 0; i < node.length; i++){
+        counts[0] = aminoAcid;
+        counts[i + 1] = node[i];
+      }
+      return aminoAcidCounts();
+    }
   }
 
 
   /********************************************************************************************/
   /* recursively determines if a linked list is sorted or not */
   public boolean isSorted(){
-    return false;
+    if(next == null){
+      return true;
+    }
+    if(next.aminoAcid > aminoAcid){
+      return false;
+    }
+    return next.isSorted();
   }
 
 
   /********************************************************************************************/
   /* Static method for generating a linked list from an RNA sequence */
   public static AminoAcidLL createFromRNASequence(String inSequence){
-    return null;
+    AminoAcidLL block = new AminoAcidLL(inSequence.substring(0, 3));
+    boolean test = true;
+
+    if(inSequence.substring(0, 3).charAt(0) == '*'){
+      block.addCodon(inSequence.substring(0, 3));
+      test = false;
+    }
+    else{
+      block.addCodon(inSequence.substring(0, 3));
+    }
+
+    for (int i = 3; i < inSequence.length() - 2; i += 3) {
+      //use string.subString(start, end)
+      if (inSequence.charAt(i) == '*') {
+        block.addCodon(inSequence.substring(i, i + 3));
+        test = false;
+      }
+      else{
+        block.addCodon(inSequence.substring(i, i + 3));
+      }
+    }
+    return block;
   }
 
 
