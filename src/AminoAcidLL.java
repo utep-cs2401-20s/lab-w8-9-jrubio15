@@ -1,47 +1,58 @@
-class AminoAcidLL{
+class AminoAcidLL {
   char aminoAcid;
   String[] codons;
   int[] counts;
   AminoAcidLL next;
 
-  AminoAcidLL(){
-    aminoAcid = 0;
+  AminoAcidLL() {
 
   }
 
 
   /********************************************************************************************/
-  /* Creates a new node, with a given amino acid/codon 
+  /* Creates a new node, with a given amino acid/codon
    * pair and increments the codon counter for that codon.
    * NOTE: Does not check for repeats!! */
-  AminoAcidLL(String inCodon){
-    AminoAcidResources.getAminoAcidFromCodon(inCodon);
-    AminoAcidResources.getCodonListForAminoAcid(aminoAcid);
-    incrCodon(inCodon);
-    next = null;
+  AminoAcidLL(String inCodon) {
+    this.aminoAcid = AminoAcidResources.getAminoAcidFromCodon(inCodon);
+    this.codons = AminoAcidResources.getCodonListForAminoAcid(aminoAcid);
+    this.next = null;
   }
 
+  private void incrCodons(String inCodon) {
+    for (int i = 0; i < codons.length; i++) {
+      if (codons[i].equals((inCodon))){
+      counts[i]++;
+    }
+  }
+}
   /********************************************************************************************/
   /* Recursive method that increments the count for a specific codon:
    * If it should be at this node, increments it and stops, 
    * if not passes the task to the next node. 
    * If there is no next node, add a new node to the list that would contain the codon. 
    */
-  private void incrCodon(String c) {}
     private void addCodon (String inCodon) {
-      if (next == null) {
         if (aminoAcid == AminoAcidResources.getAminoAcidFromCodon(inCodon)) {
-          incrCodon(inCodon);
-        } else if (next != null) {
+          incrCodons(inCodon);
+        }
+        else if (next != null) {
           next.addCodon(inCodon);
         }
+        else{
+          next = new AminoAcidLL(inCodon);
+          addCodon(inCodon);
       }
     }
 
   /********************************************************************************************/
   /* Shortcut to find the total number of instances of this amino acid */
   private int totalCount(){
-    return 0;
+    int sum = 0;
+    for(int i = 0; i < counts.length; i++){
+      sum += counts[i];
+    }
+    return  sum;
   }
 
   /********************************************************************************************/
