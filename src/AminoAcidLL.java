@@ -158,15 +158,14 @@ class AminoAcidLL {
       return new char[]{aminoAcid};
     }
     char[] a = next.aminoAcidList();
-    char[] finalA = new char[a.length + 1];
-    finalA[0] = aminoAcid;
+    char[] fin = new char[a.length + 1];
+    fin[0] = aminoAcid;
 
-    for (int i = 1; i < finalA.length; i++) {
-      finalA[i] = a[i - 1];
+    for (int i = 1; i < fin.length; i++) {
+      fin[i] = a[i - 1];
     }
-    return finalA;
+    return fin;
   }
-
   /********************************************************************************************/
   /* Recursively returns the total counts of amino acids in the order that they are in in the linked list. */
   public int[] aminoAcidCounts(){
@@ -184,8 +183,6 @@ class AminoAcidLL {
       return aminoAcidCounts();
     }
   }
-
-
   /********************************************************************************************/
   /* recursively determines if a linked list is sorted or not */
   public boolean isSorted(){
@@ -197,30 +194,27 @@ class AminoAcidLL {
     }
     return next.isSorted();
   }
-
-
   /********************************************************************************************/
   /* Static method for generating a linked list from an RNA sequence */
   public static AminoAcidLL createFromRNASequence(String inSequence){
     AminoAcidLL block = new AminoAcidLL(inSequence.substring(0, 3));
     boolean test = true;
 
-    if(inSequence.substring(0, 3).charAt(0) == '*'){
-      block.addCodon(inSequence.substring(0, 3));
+    if(inSequence.substring(0, 4).charAt(0) == '*'){
+      block.addCodon(inSequence.substring(0, 4));
       test = false;
     }
     else{
-      block.addCodon(inSequence.substring(0, 3));
+      block.addCodon(inSequence.substring(0, 4));
     }
-
-    for (int i = 3; i < inSequence.length() - 2; i += 3) {
+    for (int i = 3; i < inSequence.length() - 1; i += 4) {
       //use string.subString(start, end)
       if (inSequence.charAt(i) == '*') {
-        block.addCodon(inSequence.substring(i, i + 3));
+        block.addCodon(inSequence.substring(i, i + 4));
         test = false;
       }
       else{
-        block.addCodon(inSequence.substring(i, i + 3));
+        block.addCodon(inSequence.substring(i, i + 4));
       }
     }
     return block;
@@ -237,13 +231,13 @@ class AminoAcidLL {
       for(AminoAcidLL i = inList; i.next != null; i = i.next){
         for(AminoAcidLL j = i.next; j.next != null; j = j.next){
           if (i.aminoAcid > j.aminoAcid) {
-            AminoAcidLL temperature = i;
+            AminoAcidLL temp = i;
             j.next = i;
-            i = temperature;
+            i = temp;
           }
         }
       }
     }
-    return null;
+    return inList;
   }
 }
