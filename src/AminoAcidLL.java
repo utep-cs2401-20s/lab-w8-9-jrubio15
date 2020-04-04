@@ -78,7 +78,38 @@ class AminoAcidLL {
   /* Recursive method that finds the differences in **Amino Acid** counts. 
    * the list *must* be sorted to use this method */
   public int aminoAcidCompare(AminoAcidLL inList){
-    return 0;
+    if(!inList.isSorted()){
+      return 0;
+    }
+    int diff = 0;
+    if(inList == null){
+      diff += totalCount();
+    }
+    if(next != null){
+      diff += next.aminoAcidCompare(inList);
+    }
+    else if(aminoAcid == inList.aminoAcid){
+      diff += totalDiff(inList);
+    }
+    if(next != null){
+      diff += aminoAcidCompare(inList.next);
+    }
+    if(next == null && inList.next != null){
+      diff += aminoAcidCompare(inList.next);
+    }
+    else if(next != null && aminoAcid < inList.aminoAcid){
+      diff += totalCount();
+      if(next != null){
+        diff += next.aminoAcidCompare(inList);
+      }
+      else if(next == null || aminoAcid > inList.aminoAcid){
+        diff += inList.totalCount();
+        if(inList.next != null){
+          diff += aminoAcidCompare(inList.next);
+        }
+      }
+    }
+    return diff;
   }
 
   /********************************************************************************************/
@@ -119,6 +150,20 @@ class AminoAcidLL {
   /********************************************************************************************/
   /* sorts a list by amino acid character*/
   public static AminoAcidLL sort(AminoAcidLL inList){
+    if(inList.isSorted()){
+      return inList;
+    }
+    else{
+      for(AminoAcidLL i = inList; i.next != null; i = i.next){
+        for(AminoAcidLL j = i.next; j.next != null; j = j.next){
+          if (i.aminoAcid > j.aminoAcid) {
+            AminoAcidLL temperature = i;
+            j.next = i;
+            i = temperature;
+          }
+        }
+      }
+    }
     return null;
   }
 }
